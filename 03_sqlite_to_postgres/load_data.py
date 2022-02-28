@@ -5,7 +5,7 @@ from psycopg2.extensions import connection as _connection
 from psycopg2.extras import DictCursor
 
 
-def load_from_sqlite(connection: sqlite3.Connection, pg_conn: _connection):
+def load_from_sqlite(connection: sqlite3.Connection, pg_conn: _connection) -> None:
     """Основной метод загрузки данных из SQLite в Postgres"""
     # postgres_saver = PostgresSaver(pg_conn)
     # sqlite_loader = SQLiteLoader(connection)
