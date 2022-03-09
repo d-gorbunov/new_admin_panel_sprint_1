@@ -1,4 +1,5 @@
 import os
+from typing import List
 from pathlib import Path
 
 from split_settings.tools import include
@@ -16,7 +17,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG_MODE', False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS: List[str] = []
 
 ROOT_URLCONF = 'config.urls'
 
