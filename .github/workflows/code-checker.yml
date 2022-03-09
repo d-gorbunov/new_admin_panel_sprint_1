@@ -16,4 +16,6 @@ jobs:
     - name: Flake8
       run: flake8 .
     - name: Mypy
-      run: mypy -p 03_sqlite_to_postgres
+      run: |
+        mypy -p 02_movies_admin
+        mypy -p 03_sqlite_to_postgres
