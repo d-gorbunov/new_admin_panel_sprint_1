@@ -33,6 +33,8 @@ include(
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
+LOCALE_PATH = ['movies/locale']
+
 LANGUAGE_CODE = 'ru-RU'
 
 TIME_ZONE = 'UTC'
