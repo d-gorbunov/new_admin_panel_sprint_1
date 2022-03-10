@@ -101,4 +101,3 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
             models.Index(fields=['title'], name='film_work_title_idx'),
             models.Index(fields=['creation_date', 'rating'], name='movie_release_date_rating_idx')
         ]
-
