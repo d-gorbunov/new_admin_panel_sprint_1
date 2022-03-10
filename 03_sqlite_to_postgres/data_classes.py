@@ -46,5 +46,5 @@ class GenreFilmWork(Common):
 class PersonFilmWork(Common):
     __slots__ = ('id', 'person_id', 'film_work_id', 'role', 'created_at')
     role: str
-    person_id: datetime
-    film_work_id: datetime
+    person_id: uuid.UUID
+    film_work_id: uuid.UUID

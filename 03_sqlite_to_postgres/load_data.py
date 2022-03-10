@@ -1,12 +1,13 @@
 import os
 import csv
 import sqlite3
+import logging
 import tempfile
 
-import psycopg2
 from psycopg2 import DatabaseError, OperationalError
 from psycopg2.extensions import connection as _connection
 
+from db_connectors import sqlite_connector, postgres_connector
 from data_classes import FilmWork, Genre, Person, GenreFilmWork, PersonFilmWork
 
 tables_map = {
@@ -62,7 +63,7 @@ class SQLiteLoader:
                             obj = class_(**row)
                             writer.writerow({field: getattr(obj, field) for field in fieldnames})
             except IOError as e:
-                print(f"ERROR! Can't handle with file: {e.filename}.\nREASON: {e.strerror}")
+                logging.error(f"Can't handle with file: {e.filename}.\nREASON: {e.strerror}")
 
         cursor.close()  # Закрываем курсор
 
@@ -77,6 +78,7 @@ def load_from_sqlite(sqlite_connection: sqlite3.Connection, postgres_connection:
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.ERROR, format='%(levelname)s! %(message)s')
     dsn = {
         'dbname': os.environ.get('DB_NAME'),
         'user': os.environ.get('DB_USER'),
@@ -85,15 +87,8 @@ if __name__ == '__main__':
         'port': os.environ.get('DB_PORT', 5432),
         'options': '-c search_path=content'
     }
-    pg_conn, sqlite_conn = None, None
     try:
-        with sqlite3.connect('db.sqlite') as sqlite_conn, psycopg2.connect(**dsn) as pg_conn:
+        with sqlite_connector('db.sqlite') as sqlite_conn, postgres_connector(dsn) as pg_conn:
             load_from_sqlite(sqlite_conn, pg_conn)
-    except (DatabaseError, OperationalError) as exc:
-        print(f"ERROR! Can't handle with database.\nREASON: {exc}")
-    finally:
-        if pg_conn:
-            pg_conn.close()
-
-        if sqlite_conn:
-            sqlite_conn.close()
+    except (DatabaseError, OperationalError, sqlite3.Error) as exc:
+        logging.error(f"Can't handle with database.\nREASON: {exc}")
